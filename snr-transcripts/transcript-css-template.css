@@ -1,0 +1,15 @@
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.speaker_label {
+  font-weight: bold;
+}
+
+.marker {
+  font-weight: bold;
+  font-size: 2rem;
+}

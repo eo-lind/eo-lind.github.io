@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,100..900;1,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <title>My Races</title>
+    <style>
+      body {
+        background-color: #f5f5f5;
+        font-family: "Montserrat", sans-serif;
+        font-optical-sizing: auto;
+        font-weight: 400;
+        font-style: normal;
+        font-size: small;
+        padding: 20px;
+      }
+      h3 {
+        font-family: "Albert Sans", sans-serif;
+        font-optical-sizing: auto;
+        font-weight: 600;
+        font-style: normal;
+        margin-bottom: 5px;
+      }
+      ul {
+        padding-left: 20px;
+      }
+      #myRaces {
+        border: 1px black dotted;
+        border-radius: 1rem;
+        padding: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="myRaces">
+        <div id="nextRace"></div>
+        <div id="upcomingRaces"></div>
+    </div>
+
+    <script>
+      // Race data
+      const races = [
+        {
+          id: 1,
+          raceName: "Silverlake Conservatory of Music 5K Funk Run",
+          raceUrl: "",
+          raceDate: "2025-03-09",
+        },
+        {
+          id: 2,
+          raceName: "Rose Bowl Half Marathon",
+          raceUrl: "https://www.mccourtfoundation.org/event/rose-bowl-half-5k",
+          raceDate: "2025-04-27",
+        },
+        {
+          id: 3,
+          raceName: "Santa Monica Classic (10K)",
+          raceUrl:
+            "https://www.mccourtfoundation.org/event/santa-monica-classic",
+          raceDate: "2025-09-07",
+        },
+        {
+          id: 4,
+          raceName: "Los Angeles Marathon (2026)",
+          raceUrl: "",
+          raceDate: "2026-03-15",
+        },
+      ]
+
+      // Helper function to format dates
+      function formatDate(dateString) {
+        const options = {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        }
+        return new Date(dateString).toLocaleDateString(undefined, options)
+      }
+
+      // Function to find and display the next race
+      function displayNextRace() {
+        const today = new Date()
+        const futureRaces = races.filter(
+          (race) => new Date(race.raceDate) >= today
+        )
+
+        if (futureRaces.length === 0) return // No future races, do nothing
+
+        // Find the next race (closest to today)
+        futureRaces.sort((a, b) => new Date(a.raceDate) - new Date(b.raceDate))
+        const nextRace = futureRaces[0]
+
+        // Display the next race
+        let html = `<h3>NEXT RACE</h3>`
+        html += nextRace.raceUrl
+          ? `<p><a href="${nextRace.raceUrl}" target="_blank">${
+              nextRace.raceName
+            }</a><br>${formatDate(nextRace.raceDate)}</p>`
+          : `<p>${nextRace.raceName}<br>${formatDate(nextRace.raceDate)}</p>`
+
+        document.getElementById("nextRace").innerHTML = html
+      }
+
+      // Function to display upcoming races (excluding nextRace)
+      function displayUpcomingRaces() {
+        const today = new Date()
+        const futureRaces = races.filter(
+          (race) => new Date(race.raceDate) >= today
+        )
+
+        if (futureRaces.length <= 1) return // No upcoming races besides nextRace, do nothing
+
+        // Sort races by date
+        futureRaces.sort((a, b) => new Date(a.raceDate) - new Date(b.raceDate))
+
+        // Remove the first race (which is the next race)
+        const remainingRaces = futureRaces.slice(1)
+
+        let html = `<h3>UPCOMING</h3><ul>`
+        remainingRaces.forEach((race) => {
+          html += race.raceUrl
+            ? `<li><a href="${race.raceUrl}" target="_blank">${
+                race.raceName
+              }</a> - ${formatDate(race.raceDate)}</li>`
+            : `<li>${race.raceName} - ${formatDate(race.raceDate)}</li>`
+        })
+        html += `</ul>`
+
+        document.getElementById("upcomingRaces").innerHTML = html
+      }
+
+      // Run functions on page load
+      displayNextRace()
+      displayUpcomingRaces()
+    </script>
+  </body>
+</html>
